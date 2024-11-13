@@ -58,12 +58,29 @@ function ExportExcel({ data }) {
 }
 
 export default function ReadExcel() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   return (
     <div>
       <UploadFile setData={setData} />
-      <ExportExcel data={data} />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      {/* <ExportExcel data={data} /> */}
+      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+      <table>
+        {data?.data?.map((listValue, index) => {
+          return (
+            <tr key={index}>
+              <td>{listValue["PROD Date"]}</td>
+              <td>{listValue["WMR with Subject"]}</td>
+              <td>{listValue["URL"]}</td>
+              <td>{listValue["Active/Deleted"]}</td>
+              <td>{listValue["Owner Name"]}</td>
+              <td>{listValue["Expiry date"]}</td>
+              <td>{listValue["ICMS/Drupal"]}</td>
+              <td>{listValue["New/Existing"]}</td>
+              <td>{listValue["Category(EDM/PDF/Landing page/ Vanity)"]}</td>
+            </tr>
+          );
+        })}
+      </table>
     </div>
   );
 }
