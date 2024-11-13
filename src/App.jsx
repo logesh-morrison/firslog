@@ -1,5 +1,5 @@
 import { useState } from "react";
-import readExcel from "./ReadExcel";
+import ReadExcel from "./ReadExcel";
 import "./App.css";
 
 function App() {

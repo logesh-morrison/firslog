@@ -57,7 +57,7 @@ function ExportExcel({ data }) {
   );
 }
 
-export default function readExcel() {
+export default function ReadExcel() {
   const [data, setData] = useState(null);
   return (
     <div>
