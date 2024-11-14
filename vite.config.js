@@ -6,4 +6,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/firslog/", // YOUR REPO NAME HERE
+  build: {
+    outDir: "dist", // Default build output directory
+  },
 });
