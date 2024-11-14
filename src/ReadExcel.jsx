@@ -25,7 +25,7 @@ export default function ReadExcel() {
         else if (
           typeof cell === "number" &&
           !isNaN(cell) &&
-          cell > 0 &&
+          cell > 25570 &&
           cell < 2958465 &&
           cell % 1 === 0
         ) {
