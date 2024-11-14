@@ -94,7 +94,7 @@ export default function ReadExcel() {
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <p>{isLoading && <p>Processing, Please wait</p>}</p>
       <div style={{ overflowX: "auto" }}>
-        {data && (
+        {data && data.length != 0 && (
           <table>
             <thead>
               <tr>
