@@ -94,26 +94,28 @@ export default function ReadExcel() {
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <p>{isLoading && <p>Processing, Please wait</p>}</p>
       <div style={{ overflowX: "auto" }}>
-        <table>
-          <thead>
-            <tr>
-              {Object.entries(data?.data[0]).map(([key, value]) => (
-                <td key={key}>{key}</td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data?.data?.map((listValue, index) => {
-              return (
-                <tr key={index}>
-                  {Object.entries(listValue).map(([key, value]) => (
-                    <td key={key}>{value}</td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {data && (
+          <table>
+            <thead>
+              <tr>
+                {Object.entries(data?.data[0]).map(([key, value]) => (
+                  <td key={key}>{key}</td>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data?.data?.map((listValue, index) => {
+                return (
+                  <tr key={index}>
+                    {Object.entries(listValue).map(([key, value]) => (
+                      <td key={key}>{value}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
