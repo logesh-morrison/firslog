@@ -4,11 +4,35 @@ import * as XLSX from "xlsx";
 export default function ReadExcel() {
   function parseExcelData(evt) {
     const bstr = evt.target.result; // binaryStr
-    const wb = XLSX.read(bstr, { type: "binary" }); // parse: 'binaryStr' to 'workbook'
-    const sheet1 = wb.Sheets[wb.SheetNames[0]]; // get: first worksheet   // TODO: read all sheets
-    // var data = XLSX.utils.sheet_to_json(sheet1, { header: 1 }); // array of arrays
-    const data = XLSX.utils.sheet_to_json(sheet1, { header: 2 }); // array of objects
-    return data;
+
+    const wb = XLSX.read(bstr, { type: "binary" });
+
+    const sheet1 = wb.Sheets[wb.SheetNames[0]];
+
+    // Get data as an array of objects (with header: 2)
+    const data = XLSX.utils.sheet_to_json(sheet1, { header: 2 });
+
+    // Format date columns (if any)
+    const formattedData = data.map((row) => {
+      Object.keys(row).forEach((key) => {
+        const cell = row[key];
+
+        if (cell instanceof Date) {
+          row[key] = cell.toLocaleDateString(); // Format to readable date
+        }
+
+        // Check if it's an Excel date serial number (number type, positive value)
+        else if (typeof cell === "number" && !isNaN(cell) && cell > 0) {
+          // Convert Excel date serial number to JavaScript Date object
+          const excelDate = XLSX.utils.format_cell({ t: "n", v: cell });
+          const jsDate = new Date(cell - 25569, 86400, 1000); // Convert Excel date to JS Date
+          row[key] = jsDate.toLocaleDateString(); // Format as readable date
+        }
+      });
+      return row;
+    });
+
+    return formattedData;
   }
 
   function readExcelFile(files, setData) {
@@ -71,21 +95,24 @@ export default function ReadExcel() {
       <p>{isLoading && <p>Processing, Please wait</p>}</p>
       <div style={{ overflowX: "auto" }}>
         <table>
-          {data?.data?.map((listValue, index) => {
-            return (
-              <tr key={index}>
-                <td>{listValue["PROD Date"]}</td>
-                <td>{listValue["WMR with Subject"]}</td>
-                <td>{listValue["URL"]}</td>
-                <td>{listValue["Active/Deleted"]}</td>
-                <td>{listValue["Owner Name"]}</td>
-                <td>{listValue["Expiry date"]}</td>
-                <td>{listValue["ICMS/Drupal"]}</td>
-                <td>{listValue["New/Existing"]}</td>
-                <td>{listValue["Category(EDM/PDF/Landing page/ Vanity)"]}</td>
-              </tr>
-            );
-          })}
+          <thead>
+            <tr>
+              {Object.entries(data?.data[0]).map(([key, value]) => (
+                <td key={key}>{key}</td>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data?.data?.map((listValue, index) => {
+              return (
+                <tr key={index}>
+                  {Object.entries(listValue).map(([key, value]) => (
+                    <td key={key}>{value}</td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     </div>
