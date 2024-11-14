@@ -22,11 +22,22 @@ export default function ReadExcel() {
         }
 
         // Check if it's an Excel date serial number (number type, positive value)
-        else if (typeof cell === "number" && !isNaN(cell) && cell > 0) {
-          // Convert Excel date serial number to JavaScript Date object
-          const excelDate = XLSX.utils.format_cell({ t: "n", v: cell });
-          const jsDate = new Date(cell - 25569, 86400, 1000); // Convert Excel date to JS Date
-          row[key] = jsDate.toLocaleDateString(); // Format as readable date
+        else if (
+          typeof cell === "number" &&
+          !isNaN(cell) &&
+          cell > 0 &&
+          cell < 2958465 &&
+          cell % 1 === 0
+        ) {
+          // Excel date serial number to JS Date conversion
+          const excelEpoch = 25569; // Number of days between 1900-01-01 and 1970-01-01
+          const msPerDay = 86400000; // Milliseconds in one day
+
+          // Convert the Excel serial number to JavaScript Date
+          const jsDate = new Date((cell - excelEpoch) * msPerDay);
+
+          // Format the date as a readable string
+          row[key] = jsDate.toLocaleDateString(); // Or use any custom date format
         }
       });
       return row;
