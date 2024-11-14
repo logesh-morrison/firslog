@@ -7,8 +7,8 @@ function App() {
 
   return (
     <>
-      <p>asdf</p>
-      {/* <ReadExcel /> */}
+      {/* <p>asdf</p> */}
+      <ReadExcel />
     </>
   );
 }
